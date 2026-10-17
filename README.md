@@ -181,12 +181,19 @@ First confirm the app runs locally and check `git status` before staging files. 
 
 Then create a **private or public** repository on GitHub, connect it with the remote URL GitHub provides (`git remote add origin <your-repository-url>`), and push the initial branch (`git push -u origin main`). Do not paste an API key into GitHub.
 
-For an eventual separate frontend/backend deployment, this project can be hosted as a Vite frontend on Vercel and a Flask web service on Render. Current provider instructions:
+### Deploy both services on Render
 
-- [Vercel: Vite projects](https://vercel.com/docs/frameworks/frontend/vite) — set the project root to `frontend`, use `npm run build`, and set the output directory to `dist`. Set `VITE_API_BASE_URL` to the deployed backend's HTTPS URL before the frontend build.
-- [Render: Flask apps](https://render.com/docs/deploy-flask) — create a Python web service with the root directory set to `backend`, build command `pip install -r requirements.txt`, and start command `gunicorn app:app`. Add `GEMINI_API_KEY`, `GEMINI_MODEL`, and `FRONTEND_ORIGINS` as backend environment variables in the provider dashboard; set `FRONTEND_ORIGINS` to your deployed frontend origin.
+The root `render.yaml` configures a free Flask web service and a static Vite website as one Render Blueprint:
 
-After deployment, test the backend's `/api/health` endpoint and send a real question from the deployed website. Provider plan availability, prices, sleeping behavior, and Gemini API terms can change; check their current documentation and account terms before choosing a plan. Never commit or expose production secrets.
+1. Push the latest project files to your GitHub repository.
+2. Sign in to [Render](https://dashboard.render.com/), choose **New + → Blueprint**, and connect the Nova AI GitHub repository.
+3. Render reads `render.yaml`. During setup, enter a **new, active Gemini API key** for `GEMINI_API_KEY`; do not put it in GitHub or the frontend.
+4. Create the Blueprint and wait for both services to finish deploying.
+5. Open the `nova-ai-frontend` static site URL to use and share the website. The `nova-ai-api` service provides `/api/health` for a backend check.
+
+The Blueprint connects the frontend to the backend and allows the frontend origin in the backend's CORS settings. The key remains a backend secret. The free web service may sleep after inactivity and take around a minute to wake; free availability and Gemini quotas can change. See [Render Blueprint documentation](https://render.com/docs/blueprint-spec), [Render's Flask guide](https://render.com/docs/deploy-flask), and the current provider terms for details.
+
+After deployment, test the backend's `/api/health` endpoint and send a real question from the deployed website. Never commit or expose production secrets.
 
 ## Future improvements
 

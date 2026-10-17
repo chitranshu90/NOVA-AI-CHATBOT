@@ -13,7 +13,9 @@ import Sidebar from "./components/Sidebar.jsx";
 
 const STORAGE_KEY = "nova-ai-conversations";
 const THEME_KEY = "nova-ai-theme";
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000").replace(/\/+$/, "");
+const configuredApiUrl = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+const API_BASE_URL = (configuredApiUrl.includes("://") ? configuredApiUrl : `https://${configuredApiUrl}`)
+  .replace(/\/+$/, "");
 
 const suggestions = [
   { label: "Explain a difficult concept", prompt: "Explain a difficult concept to me in simple, clear steps.", icon: BookOpen },
