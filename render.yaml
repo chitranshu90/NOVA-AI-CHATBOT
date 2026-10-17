@@ -13,7 +13,7 @@ services:
       - key: GEMINI_MODEL
         value: gemini-3.8-flash
       - key: FRONTEND_ORIGINS
-        value: https://nova-ai-frontend.onrender.com
+        value: https://nova-ai-frontend-f970.onrender.com
 
   - type: web
     name: nova-ai-frontend
